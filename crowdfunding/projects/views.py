@@ -39,7 +39,7 @@ class ProjectDetail(APIView):
 
     def get_object(self, pk):
         try:
-            rproject = Project.objects.get(pk=pk)
+            project = Project.objects.get(pk=pk)
             self.check_object_permissions(self.request, project)
             return project
         except Project.DoesNotExist:
@@ -72,7 +72,7 @@ class PledgeList(APIView):
     def post(self, request):
         serializer = PledgeSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(supporter=request.user)
             return Response(
                 serializer.data,
                 status=status.HTTP_201_CREATED
